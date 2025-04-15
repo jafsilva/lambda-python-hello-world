@@ -1,11 +1,11 @@
-name: Terraform Apply
+name: Destroy
 
 on:
   workflow_dispatch:
 
 jobs:
-  terraform-apply:
-    name: 'Terraform Apply'
+  cleanup:
+    name: 'Cleanup'
     runs-on: ubuntu-latest
 
     defaults:
@@ -28,13 +28,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION}}
 
-      - name: Download tfplan
-        uses: actions/download-artifact@v4
-        with:
-          name: tfplan
-          path: iac/
       - name: Terraform Init
         run: terraform init
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
+      - name: Terraform Destroy
+        working-directory: terraform
+        run: terraform destroy -auto-approve

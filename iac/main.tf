@@ -72,7 +72,7 @@ resource "aws_lambda_function" "this" {
   function_name = "HelloWorldLambda"
   runtime       = "python3.11"
   handler       = "lambda_main.lambda_handler"
-  filename      = "../lambda_main.zip"
+  filename      = "lambda_main.zip"
   role          = aws_iam_role.this.arn
   memory_size   = 128
   timeout       = 30

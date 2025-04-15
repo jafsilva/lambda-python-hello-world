@@ -1,4 +1,4 @@
-name: Terraform Plan
+name: Deploy
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
       - feature/*
 
 jobs:
-  terraform-plan:
-    name: 'Terraform Plan'
+  deploy:
+    name: 'Deploy'
     runs-on: ubuntu-latest
 
     defaults:
@@ -31,6 +31,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Zip Lambda Function
+        run: |
+          zip lambda_main.zip ../lambda_main.py
+
       - name: Terraform Init
         run: terraform init
 
@@ -39,10 +43,6 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan
-      
-      - name: Upload tfplan
-        uses: actions/upload-artifact@v4
-        with:
-          name: tfplan
-          path: iac/tfplan
-      
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
