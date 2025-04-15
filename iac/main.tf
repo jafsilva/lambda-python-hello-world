@@ -9,14 +9,12 @@ terraform {
     bucket  = "zelabs-tf-state"
     key     = "hellowlambda-python-hello-world/terraform.tfstate"
     region  = "us-east-1"
-    profile = "pessoal"
   }
 }
 
 # Configure o provider AWS
 provider "aws" {
   region  = "us-east-1"
-  profile = "pessoal"
   default_tags {
     tags = {
       Environment = "Test"
