@@ -142,7 +142,7 @@ resource "aws_lambda_permission" "this" {
 
 # 11. Output da URL de Invocação da API
 output "invoke_url" {
-  value = "${aws_api_gateway_deployment.this.invoke_url}${aws_api_gateway_stage.this.stage_name}${aws_api_gateway_resource.this.path}"
+  value = "${aws_api_gateway_stage.this.invoke_url}${aws_api_gateway_resource.this.path}"
 }
 
 # Data source para obter a região atual
