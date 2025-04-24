@@ -6,8 +6,8 @@ terraform {
     }
   }
   backend "s3" {
-    bucket  = "zelabs-tf-state"
-    key     = "hellowlambda-python-hello-world/terraform.tfstate"
+    bucket  = "<bucket-s3>"
+    key     = "terraform.tfstate"
     region  = "us-east-1"
   }
 }
