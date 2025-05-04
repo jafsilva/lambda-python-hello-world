@@ -1,1 +1,1 @@
-# lambda-python-hello-world
+# serveless-aws-lambda
