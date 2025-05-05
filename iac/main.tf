@@ -6,15 +6,15 @@ terraform {
     }
   }
   backend "s3" {
-    bucket  = "<bucket-s3>"
-    key     = "terraform.tfstate"
-    region  = "us-east-1"
+    bucket = "<bucket-s3>"
+    key    = "terraform.tfstate"
+    region = "us-east-1"
   }
 }
 
 # Configure o provider AWS
 provider "aws" {
-  region  = "us-east-1"
+  region = "us-east-1"
   default_tags {
     tags = {
       Environment = "Test"
@@ -67,15 +67,23 @@ resource "aws_iam_role_policy_attachment" "this" {
   policy_arn = aws_iam_policy.this.arn
 }
 
+data "archive_file" "lambda_code" {
+  type        = "zip"
+  source_dir  = "lambda"
+  output_path = "lambda_main.zip"
+}
+
+
 # 4. Criar a Função Lambda
 resource "aws_lambda_function" "this" {
-  function_name = "HelloWorldLambda"
-  runtime       = "python3.11"
-  handler       = "lambda_main.lambda_handler"
-  filename      = "lambda_main.zip"
-  role          = aws_iam_role.this.arn
-  memory_size   = 128
-  timeout       = 30
+  function_name    = "HelloWorldLambda"
+  runtime          = "python3.11"
+  handler          = "lambda_main.lambda_handler"
+  filename         = data.archive_file.lambda_code.output_path
+  source_code_hash = data.archive_file.lambda_code.output_base64sha256
+  role             = aws_iam_role.this.arn
+  memory_size      = 128
+  timeout          = 30
 
   depends_on = [
     aws_iam_role_policy_attachment.this
